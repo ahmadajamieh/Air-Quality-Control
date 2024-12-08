@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
@@ -291,9 +292,14 @@ for pollutant in ['pm10', 'no2', 'so2', 'co']:
     predicted_scaled = model.predict(x_test)
     predicted = scaler.inverse_transform(predicted_scaled.reshape(-1, 1))
 
-    # Calculate and print the MSE
+     # Calculate and print the MSE
+    mae = mean_absolute_error(test_series[sequence_length:], predicted)
+    r2 = r2_score(test_series[sequence_length:], predicted)
     mse = mean_squared_error(test_series[sequence_length:], predicted)
+    
     print(f'Mean Squared Error for {pollutant.upper()}: {mse:.2f}')
+    print(f"Mean Absolute Error (MAE) for {pollutant.upper()}: {mae:.2f}")
+    print(f"R² Score for {pollutant.upper()}: {r2:.2f}")
 
     # Visualize actual vs predicted values
     plt.figure(figsize=(12, 6))
